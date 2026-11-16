@@ -486,8 +486,9 @@
             }
 
             let numericTotal = cart.finalSum;
-            // Kwota w zaokrągleniu do groszy/całkowitych pod Stripe quantity (np. 243.99 -> 244 zł lub mnożnik bazowy 1 PLN)
-            let stripeQuantity = Math.round(numericTotal); 
+            
+            // Ponieważ produkt w Stripe kosztuje 2 zł (minimalna kwota), dzielimy sumę przez 2, aby uzyskać właściwą ilość (quantity)
+            let stripeQuantity = Math.max(1, Math.round(numericTotal / 2)); 
 
             // Twój wygenerowany link ze Stripe z dopisanym parametrem dynamicznej ilości
             let stripePaymentLink = "https://buy.stripe.com/test_4gMfZh11j0Mc812a6i1ck01?quantity=" + stripeQuantity;
