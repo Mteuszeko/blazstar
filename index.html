@@ -1,667 +1,301 @@
 <!DOCTYPE html>
-<html lang="pl" class="dark">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLAZSTAR® — Elegancka Odzież Codzienna i Smart-Casual</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#111111',
-                            light: '#f9f8f6',
-                            beige: '#e8e2db',
-                            sand: '#d4c9bd',
-                            charcoal: '#222222'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts: Playfair Display & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>BLAZSTAR — Sklep Odzieżowy</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f9f8f6;
+            background-color: #fcfbfa;
             color: #1a1a1a;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
-        h1, h2, h3, .font-serif {
-            font-family: 'Playfair Display', serif;
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: #ffffff;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1efed;
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #c5bbaF;
+        nav a:hover {
+            color: #000;
+        }
+        .cart-btn {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
             border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a39686;
+        .cart-btn:hover {
+            background: #333;
+        }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: #f4f2ee;
+        }
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: -1px;
+        }
+        .hero p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+            font-weight: 600;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-img {
+            height: 320px;
+            background: #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-weight: 500;
+        }
+        .product-info {
+            padding: 20px;
+            text-align: center;
+        }
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .product-price {
+            color: #444;
+            font-size: 15px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .add-to-cart {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .add-to-cart:hover {
+            background: #333;
+        }
+        /* Modal koszyka */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            width: 400px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .cart-items {
+            list-style: none;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .cart-items li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-size: 14px;
+        }
+        .checkout-btn {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #1a1a1a;
+            color: #fff;
+            margin-top: 80px;
+            font-size: 14px;
         }
     </style>
 </head>
-<body class="bg-[#f9f8f6] text-[#1a1a1a] relative selection:bg-[#222] selection:text-white">
+<body>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-28 opacity-0 transition-all duration-300 bg-[#111111] text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 border border-[#333]">
-        <i class="fa-solid fa-bag-shopping text-[#d4c9bd] text-lg"></i>
-        <div>
-            <p id="toast-title" class="font-bold text-sm">Powiadomienie</p>
-            <p id="toast-msg" class="text-xs text-gray-300">Produkt dodany do koszyka!</p>
-        </div>
-    </div>
-
-    <!-- Navigation Bar -->
-    <header class="fixed top-0 left-0 w-full z-40 bg-[#f9f8f6]/90 backdrop-blur-md border-b border-[#e5e0dc]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Logo (Exact BLAZSTAR bubbly style converted to vector SVG matching user image) -->
-            <a href="#" class="flex items-center gap-2 group">
-                <svg class="h-8 w-auto" viewBox="0 0 320 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.5 12C12.5 10 14 8.5 16 8.5H30C36 8.5 41 12 41 18C41 22 38 25 34 26.5C39 28 42 32 42 37.5C42 44.5 36 48.5 29 48.5H16C14 48.5 12.5 47 12.5 45V12ZM24 21V19H29C31 19 32 20 32 21.5C32 23 31 24 29 24H24V21ZM24 37.5H30C32 37.5 33 38.5 33 40C33 41.5 32 42.5 30 42.5H24V37.5Z" fill="#111111"/>
-                    <path d="M49 12C49 10 50.5 8.5 52.5 8.5H57.5C59.5 8.5 61 10 61 12V45C61 47 59.5 48.5 57.5 48.5H52.5C50.5 48.5 49 47 49 45V12Z" fill="#111111"/>
-                    <path d="M72 13.5C72 10.5 74.5 8.5 78 8.5H89C92.5 8.5 95 10.5 95 13.5V17C95 19 93.5 20.5 91.5 20.5C89.5 20.5 88 19 88 17V15H79V25H88C91.5 25 94 27 94 30V43.5C94 46.5 91.5 48.5 88 48.5H77C73.5 48.5 71 46.5 71 43.5V40C71 38 72.5 36.5 74.5 36.5C76.5 36.5 78 38 78 40V42H87V32H78C74.5 32 72 30 72 27V13.5Z" fill="#111111"/>
-                    <path d="M102 12C102 10 103.5 8.5 105.5 8.5H110.5C112.5 8.5 114 10 114 12V34.5H124C126 34.5 127.5 36 127.5 38C127.5 40 126 41.5 124 41.5H105.5C103.5 41.5 102 40 102 38V12Z" fill="#111111"/>
-                    <path d="M135 12C135 10 136.5 8.5 138.5 8.5H150C157 8.5 161 12 161 17.5C161 21 159 24 155 25.5C160 27 162.5 30.5 162.5 35.5C162.5 43 157 48.5 149 48.5H138.5C136.5 48.5 135 47 135 45V12ZM146 22V18.5H148.5C150.5 18.5 151.5 19.5 151.5 20.5C151.5 21.5 150.5 22 148.5 22H146ZM146 38.5H149C151 38.5 152 39.5 152 41C152 42.5 151 43.5 149 43.5H146V38.5Z" fill="#111111"/>
-                    <path d="M169 12C169 10 170.5 8.5 172.5 8.5H177.5C179.5 8.5 181 10 181 12V45C181 47 179.5 48.5 177.5 48.5H172.5C170.5 48.5 169 47 169 45V12Z" fill="#111111"/>
-                    <path d="M190.5 9.5C190.5 8.4 191.4 7.5 192.5 7.5H198.5C199.6 7.5 200.5 8.4 200.5 9.5V20.5H209.5C210.6 20.5 211.5 21.4 211.5 22.5V28.5C211.5 29.6 210.6 30.5 209.5 30.5H200.5V41.5C200.5 42.6 199.6 43.5 198.5 43.5H192.5C191.4 43.5 190.5 42.6 190.5 41.5V30.5H181.5C180.4 30.5 179.5 29.6 179.5 28.5V22.5C179.5 21.4 180.4 20.5 181.5 20.5H190.5V9.5Z" fill="#d4c9bd"/>
-                    <path d="M221.7 8.9C222.9 7.8 224.8 8.1 225.6 9.6L236.7 29.3C237.5 30.8 238.9 31.8 240.6 32.3L253.2 35.8C254.8 36.3 255.6 38.1 254.7 39.6L247.3 52.1C246.4 53.6 244.7 54.3 243.1 53.8L230.5 50.3C228.8 49.8 227.1 50.5 226.1 52.0L217.4 66.4C216.5 67.9 214.7 68.3 213.2 67.3L202.9 60.1C201.4 59.1 201.0 57.1 202.0 55.6L210.7 41.2C211.6 39.7 211.2 37.7 209.7 36.6L198.8 28.3C197.3 27.1 197.1 25.0 198.3 23.5L207.2 11.9C208.4 10.4 210.5 10.0 212.0 11.2L221.7 8.9Z" fill="#111111"/>
-                    <path d="M260 12C260 10 261.5 8.5 263.5 8.5H276C284 8.5 288.5 13 288.5 19.5C288.5 24 285.5 27.5 281 29C287 31 290 35 290 41C290 46.5 285.5 48.5 277 48.5H263.5C261.5 48.5 260 47 260 45V12ZM271 20V18.5H275.5C278 18.5 279 19.5 279 21C279 22.5 278 23.5 275.5 23.5H271V20ZM271 37.5H276C279 37.5 280 38.5 280 40C280 41.5 279 42.5 276 42.5H271V37.5Z" fill="#111111"/>
-                    <path d="M296 12C296 10 297.5 8.5 299.5 8.5H312C319 8.5 323.5 12.5 323.5 18C323.5 22 320.5 25 316.5 26.5C321.5 28.5 324.5 32 324.5 37.5C324.5 44.5 318.5 48.5 311.5 48.5H299.5C297.5 48.5 296 47 296 45V12ZM307 21V19H312C314 19 315 20 315 21.5C315 23 314 24 312 24H307V21ZM307 37.5H312.5C314.5 37.5 315.5 38.5 315.5 40C315.5 41.5 314.5 42.5 312.5 42.5H307V37.5Z" fill="#111111"/>
-                </svg>
-            </a>
-
-            <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
-                <a href="#hero" class="hover:text-gray-500 transition-colors">Strona Główna</a>
-                <a href="#collection" class="hover:text-gray-500 transition-colors">Kolekcja</a>
-                <a href="#about" class="hover:text-gray-500 transition-colors">O Marki</a>
-                <a href="#contact" class="hover:text-gray-500 transition-colors">Kontakt</a>
-            </nav>
-
-            <!-- Actions (Cart & Mobile Menu Toggle) -->
-            <div class="flex items-center gap-4">
-                <button onclick="toggleCart()" class="relative p-2.5 rounded-full bg-[#f1efed] hover:bg-[#e8e2db] transition-all text-[#111] flex items-center gap-2 px-4">
-                    <i class="fa-solid fa-bag-shopping text-sm"></i>
-                    <span class="text-xs font-semibold">Koszyk</span>
-                    <span id="cart-counter" class="absolute -top-1 -right-1 bg-[#111] text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                </button>
-                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-full bg-[#f1efed] text-[#111]">
-                    <i class="fa-solid fa-bars text-lg"></i>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-[#f9f8f6] border-b border-[#e5e0dc] px-6 py-4 flex flex-col gap-4">
-            <a href="#hero" onclick="toggleMobileMenu()" class="text-[#111] hover:text-gray-500 py-1 font-medium">Strona Główna</a>
-            <a href="#collection" onclick="toggleMobileMenu()" class="text-[#111] hover:text-gray-500 py-1 font-medium">Kolekcja</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="text-[#111] hover:text-gray-500 py-1 font-medium">O Marki</a>
-            <a href="#contact" onclick="toggleMobileMenu()" class="text-[#111] hover:text-gray-500 py-1 font-medium">Kontakt</a>
-        </div>
+    <header>
+        <div class="logo">BLAZSTAR</div>
+        <nav>
+            <a href="#">Strona Główna</a>
+            <a href="#produkty">Kolekcja</a>
+            <a href="#">O Marki</a>
+            <a href="#">Kontakt</a>
+        </nav>
+        <button class="cart-btn" onclick="toggleCart()">Koszyk (<span id="cart-count">0</span>)</button>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-[90vh] flex items-center justify-center pt-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#f3efed] to-[#f9f8f6]">
-        <div class="max-w-5xl mx-auto text-center">
-            <!-- Subtitle badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#e8e2db] text-[#333] text-xs font-medium uppercase tracking-widest mb-6">
-                <span>Kolekcja Wiosna / Lato 2026</span>
-            </div>
+    <section class="hero">
+        <h1>Nowoczesny Styl i Miejski Klimat</h1>
+        <p>Odkryj najnowszą kolekcję odzieży BLAZSTAR – zaprojektowaną z myślą o wygodzie, unikalnym designie i najwyższej jakości wykonania.</p>
+    </section>
+
+    <div class="container" id="produkty">
+        <h2 class="section-title">Wyróżnione Produkty</h2>
+        <div class="products-grid">
             
-            <!-- Main Title -->
-            <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal tracking-tight text-[#111] mb-6 leading-tight">
-                Klasyczna Elegancja <br>
-                <span class="italic font-light">w Codziennym Wydaniu</span>
-            </h1>
-
-            <!-- Description -->
-            <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-                Odkryj wyselekcjonowane koszule, spodnie chinosy, miękkie swetry i eleganckie marynarki stworzone dla ceniących ponadczasowy styl i najwyższą jakość tkanin.
-            </p>
-
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#collection" class="w-full sm:w-auto px-8 py-4 rounded-full bg-[#111111] text-white font-medium text-sm hover:bg-gray-800 transition-all tracking-wide shadow-md">
-                    Odkryj Kolekcję
-                </a>
-                <a href="#about" class="w-full sm:w-auto px-8 py-4 rounded-full bg-transparent border border-gray-400 hover:border-black text-[#111] font-medium text-sm transition-all tracking-wide">
-                    Filozofia Marki
-                </a>
-            </div>
-
-            <!-- Features Bar -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-20 pt-10 border-t border-[#e5e0dc] max-w-3xl mx-auto text-left sm:text-center">
-                <div>
-                    <div class="font-serif font-bold text-xl text-[#111]">100% Bawełna & Len</div>
-                    <div class="text-xs text-gray-500 mt-1">Szlachetne naturalne tkaniny</div>
-                </div>
-                <div>
-                    <div class="font-serif font-bold text-xl text-[#111]">Smart-Casual</div>
-                    <div class="text-xs text-gray-500 mt-1">Uniwersalny styl na każdą okazję</div>
-                </div>
-                <div class="col-span-2 md:col-span-1">
-                    <div class="font-serif font-bold text-xl text-[#111]">Darmowa Dostawa</div>
-                    <div class="text-xs text-gray-500 mt-1">Dla zamówień od 250 PLN</div>
+            <div class="product-card">
+                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-info">
+                    <div class="product-title">Oversize Hoodie BLAZSTAR</div>
+                    <div class="product-price">229.00 PLN</div>
+                    <button class="add-to-cart" onclick="addToCart('Oversize Hoodie BLAZSTAR', 229)">Dodaj do koszyka</button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Product Showcase / Collection Section -->
-    <section id="collection" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-widest text-gray-500 block mb-2">Asortyment</span>
-                <h2 class="font-serif text-3xl sm:text-5xl font-normal text-[#111]">
-                    Elegancja i Komfort
-                </h2>
-            </div>
-            <!-- Category Filters -->
-            <div class="flex flex-wrap gap-2 mt-6 md:mt-0">
-                <button onclick="filterProducts('all')" id="filter-all" class="filter-btn px-5 py-2.5 rounded-full bg-[#111] text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm">Wszystko</button>
-                <button onclick="filterProducts('men')" id="filter-men" class="filter-btn px-5 py-2.5 rounded-full bg-[#f1efed] border border-[#e5e0dc] text-gray-700 hover:text-black font-medium text-xs tracking-wider uppercase transition-all">Mężczyzna</button>
-                <button onclick="filterProducts('women')" id="filter-women" class="filter-btn px-5 py-2.5 rounded-full bg-[#f1efed] border border-[#e5e0dc] text-gray-700 hover:text-black font-medium text-xs tracking-wider uppercase transition-all">Kobieta</button>
-                <button onclick="filterProducts('new')" id="filter-new" class="filter-btn px-5 py-2.5 rounded-full bg-[#f1efed] border border-[#e5e0dc] text-gray-700 hover:text-black font-medium text-xs tracking-wider uppercase transition-all">Nowości</button>
-                <button onclick="filterProducts('sale')" id="filter-sale" class="filter-btn px-5 py-2.5 rounded-full bg-[#f1efed] border border-[#e5e0dc] text-gray-700 hover:text-black font-medium text-xs tracking-wider uppercase transition-all">Wyprzedaż</button>
-            </div>
-        </div>
-
-        <!-- Products Grid -->
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Dynamically populated via JS -->
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#e5e0dc]">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="text-xs font-semibold uppercase tracking-widest text-gray-500 block mb-3">O Marki Blazstar</span>
-                <h2 class="font-serif text-3xl sm:text-5xl font-normal text-[#111] mb-6 leading-tight">
-                    Filozofia prostoty i nienagannego krawiectwa.
-                </h2>
-                <p class="text-gray-600 mb-6 leading-relaxed font-light">
-                    W <strong class="text-black font-medium">Blazstar</strong> wierzymy, że elegancja nie wymaga skomplikowanych form. Tworzymy kolekcje oparte na klasycznych krojach, stonowanej palecie barw i najwyższej jakości materiałach, które posłużą przez lata.
-                </p>
-                <p class="text-gray-600 mb-8 leading-relaxed font-light">
-                    Nasze koszule, chinosy i marynarki idealnie sprawdzają się w biurze, na spotkaniach biznesowych, jak i podczas swobodnych weekendów. Stworzone dla osób, które cenią klasykę w nowoczesnym wydaniu.
-                </p>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="p-6 rounded-2xl bg-[#f1efed] border border-[#e5e0dc]">
-                        <div class="font-serif font-bold text-2xl text-[#111] mb-1">Smart-Casual</div>
-                        <div class="text-xs text-gray-500">Styl idealny do pracy i na co dzień</div>
-                    </div>
-                    <div class="p-6 rounded-2xl bg-[#f1efed] border border-[#e5e0dc]">
-                        <div class="font-serif font-bold text-2xl text-[#111] mb-1">Eko Certyfikaty</div>
-                        <div class="text-xs text-gray-500">Zrównoważona produkcja europejska</div>
-                    </div>
+            <div class="product-card">
+                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-info">
+                    <div class="product-title">Heavyweight T-Shirt Black</div>
+                    <div class="product-price">119.00 PLN</div>
+                    <button class="add-to-cart" onclick="addToCart('Heavyweight T-Shirt Black', 119)">Dodaj do koszyka</button>
                 </div>
             </div>
-            <div class="relative">
-                <div class="rounded-3xl overflow-hidden border border-[#e5e0dc] bg-[#f1efed] p-2">
-                    <img src="https://placehold.co/600x700/e8e2db/111111?text=BLAZSTAR+ELEGANCE" alt="Blazstar Atelier" class="w-full h-auto rounded-2xl object-cover">
+
+            <div class="product-card">
+                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-info">
+                    <div class="product-title">Cargo Pants Techwear</div>
+                    <div class="product-price">279.00 PLN</div>
+                    <button class="add-to-cart" onclick="addToCart('Cargo Pants Techwear', 279)">Dodaj do koszyka</button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Contact / Newsletter Section -->
-    <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div class="rounded-3xl bg-[#f1efed] p-8 sm:p-12 border border-[#e5e0dc] text-center">
-            <h2 class="font-serif text-3xl font-normal text-[#111] mb-4">Dołącz do Klubu Blazstar</h2>
-            <p class="text-gray-600 text-sm mb-8 max-w-xl mx-auto font-light">Zapisz się do newslettera i odbierz 10% rabatu na pierwsze zakupy oraz dostęp do ekskluzywnych dropów eleganckiej odzieży.</p>
-            <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input type="email" id="newsletter-email" placeholder="Twój adres e-mail..." required class="flex-1 px-5 py-3.5 rounded-full bg-white border border-[#d4c9bd] text-[#111] placeholder-gray-400 focus:outline-none focus:border-black text-sm">
-                <button type="submit" class="px-8 py-3.5 rounded-full bg-[#111] text-white font-medium text-sm hover:bg-gray-800 transition-all tracking-wide">Zapisz się</button>
-            </form>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-[#e5e0dc] bg-[#f9f8f6] pt-16 pb-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            <div>
-                <span class="font-serif font-bold text-xl tracking-wider text-[#111] block mb-4">BLAZSTAR®</span>
-                <p class="text-xs text-gray-500 leading-relaxed mb-4 font-light">
-                    Klasyczna odzież codzienna i smart-casual dla kobiet i mężczyzn ceniących ponadczasową elegancję.
-                </p>
-                <div class="flex items-center gap-3 text-gray-600">
-                    <a href="#" class="w-9 h-9 rounded-full bg-[#f1efed] border border-[#e5e0dc] flex items-center justify-center hover:bg-[#e8e2db] transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
-                    <a href="#" class="w-9 h-9 rounded-full bg-[#f1efed] border border-[#e5e0dc] flex items-center justify-center hover:bg-[#e8e2db] transition-colors"><i class="fa-brands fa-facebook text-sm"></i></a>
-                    <a href="#" class="w-9 h-9 rounded-full bg-[#f1efed] border border-[#e5e0dc] flex items-center justify-center hover:bg-[#e8e2db] transition-colors"><i class="fa-brands fa-pinterest text-sm"></i></a>
-                </div>
-            </div>
-            <div>
-                <h4 class="font-serif font-bold text-sm text-[#111] uppercase tracking-wider mb-4">Kategorie</h4>
-                <ul class="space-y-2 text-xs text-gray-600 font-light">
-                    <li><a href="#collection" class="hover:text-black transition-colors">Koszule Bawełniane</a></li>
-                    <li><a href="#collection" class="hover:text-black transition-colors">Spodnie Chinosy</a></li>
-                    <li><a href="#collection" class="hover:text-black transition-colors">Swetry i Kardigany</a></li>
-                    <li><a href="#collection" class="hover:text-black transition-colors">Marynarki i Płaszcze</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-serif font-bold text-sm text-[#111] uppercase tracking-wider mb-4">Obsługa Klienta</h4>
-                <ul class="space-y-2 text-xs text-gray-600 font-light">
-                    <li><a href="#" class="hover:text-black transition-colors">Status zamówienia</a></li>
-                    <li><a href="#" class="hover:text-black transition-colors">Dostawa i płatności</a></li>
-                    <li><a href="#" class="hover:text-black transition-colors">Zwroty i wymiany (30 dni)</a></li>
-                    <li><a href="#" class="hover:text-black transition-colors">Tabela rozmiarów</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-serif font-bold text-sm text-[#111] uppercase tracking-wider mb-4">Legal</h4>
-                <ul class="space-y-2 text-xs text-gray-600 font-light">
-                    <li><a href="#" class="hover:text-black transition-colors">Regulamin sklepu</a></li>
-                    <li><a href="#" class="hover:text-black transition-colors">Polityka prywatności</a></li>
-                    <li><a href="#" class="hover:text-black transition-colors">Cookies</a></li>
-                </ul>
-            </div>
+    <!-- Modal Koszyka -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleCart()">&times;</span>
+            <h2>Twój Koszyk</h2>
+            <ul class="cart-items" id="cartItemsList">
+                <p style="color: #777; text-align: center; margin-top: 20px;">Koszyk jest pusty.</p>
+            </ul>
+            <div style="font-weight: 600; margin-bottom: 20px; text-align: right;">Suma: <span id="cartTotal">0</span> PLN</div>
+            <button class="checkout-btn" onclick="alert('Dziękujemy za zamówienie w BLAZSTAR! (Wersja demonstracyjna)')">Przejdź do kasy</button>
         </div>
-        <div class="max-w-7xl mx-auto pt-8 border-t border-[#e5e0dc] text-center text-xs text-gray-400 font-light">
-            &copy; 2026 BLAZSTAR® Apparel. Wszelkie prawa zastrzeżone.
-        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 BLAZSTAR. Wszelkie prawa zastrzeżone.</p>
     </footer>
 
-    <!-- Cart Drawer Modal -->
-    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
-        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-white border-l border-[#e5e0dc] p-6 flex flex-col justify-between shadow-2xl relative">
-                <div>
-                    <div class="flex items-center justify-between pb-4 border-b border-[#e5e0dc]">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-bag-shopping text-[#111]"></i>
-                            <h3 class="font-serif font-bold text-lg text-[#111]">Twój Koszyk</h3>
-                        </div>
-                        <button onclick="toggleCart()" class="p-2 text-gray-500 hover:text-black rounded-full bg-[#f1efed]">
-                            <i class="fa-solid fa-xmark text-base"></i>
-                        </button>
-                    </div>
-
-                    <!-- Cart Items Container -->
-                    <div id="cart-items-container" class="mt-6 space-y-4 max-h-[50vh] overflow-y-auto pr-2">
-                        <!-- Items rendered via JS -->
-                    </div>
-                </div>
-
-                <!-- Footer Summary & Checkout -->
-                <div class="pt-6 border-t border-[#e5e0dc]">
-                    <div class="flex justify-between items-center mb-4 text-sm font-medium">
-                        <span class="text-gray-600">Suma całkowita:</span>
-                        <span id="cart-total" class="font-serif font-bold text-xl text-[#111]">0,00 PLN</span>
-                    </div>
-                    <button onclick="checkout()" class="w-full py-4 rounded-full bg-[#111] text-white font-medium text-sm hover:bg-gray-800 transition-all tracking-wide shadow-md">
-                        Przejdź do kasy
-                    </button>
-                    <p class="text-[10px] text-center text-gray-400 mt-3 font-light">Darmowa dostawa od 250 PLN • Bezpieczne płatności</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Quick View Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeProductModal()"></div>
-        <div class="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 z-10 shadow-2xl border border-[#e5e0dc] overflow-hidden">
-            <button onclick="closeProductModal()" class="absolute top-4 right-4 p-2 text-gray-500 hover:text-black rounded-full bg-[#f1efed]">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            <div id="modal-content" class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Application Logic -->
     <script>
-        // --- Products Database (Smart-Casual & Classic Apparel) ---
-        const products = [
-            {
-                id: 1,
-                name: "Klasyczna Koszula Bawełniana Oxford",
-                category: "men",
-                isNew: true,
-                isSale: false,
-                price: 219.00,
-                oldPrice: null,
-                image: "https://placehold.co/600x700/e8e2db/111111?text=KOSZULA+OXFORD",
-                desc: "Wykonana w 100% z najwyższej jakości przewiewnej bawełny Oxford. Idealna do marynarki i chinosów.",
-                sizes: ["S", "M", "L", "XL"]
-            },
-            {
-                id: 2,
-                name: "Eleganckie Spodnie Chinosy Slim",
-                category: "men",
-                isNew: false,
-                isSale: true,
-                price: 249.00,
-                oldPrice: 299.00,
-                image: "https://placehold.co/600x700/d4c9bd/111111?text=CHINOSY+SLIM",
-                desc: "Perfekcyjnie skrojone chinosy z domieszką elastanu dla maksymalnego komfortu w biurze i na co dzień.",
-                sizes: ["30/32", "32/32", "34/32", "36/32"]
-            },
-            {
-                id: 3,
-                name: "Kaszmirowy Sweter z Dekoltem w V",
-                category: "women",
-                isNew: true,
-                isSale: false,
-                price: 389.00,
-                oldPrice: null,
-                image: "https://placehold.co/600x700/f1efed/111111?text=KASZMIROWY+SWETER",
-                desc: "Luksusowy sweter z delikatnej mieszanki wełny i kaszmiru. Niezwykle miękki i ciepły.",
-                sizes: ["XS", "S", "M", "L"]
-            },
-            {
-                id: 4,
-                name: "Jedwabna Bluzka Damska",
-                category: "women",
-                isNew: false,
-                isSale: false,
-                price: 279.00,
-                oldPrice: null,
-                image: "https://placehold.co/600x700/e8e2db/111111?text=JEDWABNA+BLUZKA",
-                desc: "Zwiewna bluzka o klasycznym kroju. Doskonała baza pod elegancki żakiet lub płaszcz.",
-                sizes: ["XS", "S", "M", "L"]
-            },
-            {
-                id: 5,
-                name: "Marynarka Wełniana Smart-Casual",
-                category: "men",
-                isNew: true,
-                isSale: false,
-                price: 599.00,
-                oldPrice: null,
-                image: "https://placehold.co/600x700/d4c9bd/111111?text=MARYNARKA+WELNIANA",
-                desc: "Klasyczna marynarka męska o kroju semi-slim. Uszyta z włoskiej tkaniny wełnianej.",
-                sizes: ["48", "50", "52", "54"]
-            },
-            {
-                id: 6,
-                name: "Wełniany Płaszcz Jesienny",
-                category: "women",
-                isNew: false,
-                isSale: true,
-                price: 699.00,
-                oldPrice: 849.00,
-                image: "https://placehold.co/600x700/f1efed/111111?text=WELNIANY+PLASZCZ",
-                desc: "Ponadczasowy długi płaszcz z klapami i wiązanym paskiem w talii. Ciepły i elegancki.",
-                sizes: ["S", "M", "L"]
-            }
-        ];
+        let cart = [];
 
-        // --- State Management for Cart ---
-        let cart = JSON.parse(localStorage.getItem('blazstar_classic_cart')) || [];
-
-        function saveCart() {
-            localStorage.setItem('blazstar_classic_cart', JSON.stringify(cart));
-            updateCartCounter();
-            renderCartItems();
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+            alert(`Dodano do koszyka: ${name}`);
         }
 
-        function updateCartCounter() {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cart-counter').innerText = totalItems;
-        }
-
-        // --- Render Products ---
-        function renderProducts(filter = 'all') {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            let filtered = products;
-            if (filter === 'men') filtered = products.filter(p => p.category === 'men');
-            if (filter === 'women') filtered = products.filter(p => p.category === 'women');
-            if (filter === 'new') filtered = products.filter(p => p.isNew);
-            if (filter === 'sale') filtered = products.filter(p => p.isSale);
-
-            filtered.forEach(product => {
-                const card = document.createElement('div');
-                card.className = "group rounded-3xl bg-[#f1efed] border border-[#e5e0dc] overflow-hidden hover:border-gray-400 transition-all duration-300 flex flex-col justify-between";
-                
-                let badge = '';
-                if (product.isNew) badge = '<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-white text-[#111] text-[10px] font-semibold tracking-wider uppercase shadow-sm">Nowość</span>';
-                if (product.isSale) badge = '<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#111] text-white text-[10px] font-semibold tracking-wider uppercase shadow-sm">Wyprzedaż</span>';
-
-                card.innerHTML = `
-                    <div class="relative overflow-hidden bg-[#e8e2db] cursor-pointer" onclick="openProductModal(${product.id})">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x700/e8e2db/111111?text=BLAZSTAR'">
-                        ${badge}
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow justify-between">
-                        <div>
-                            <h3 class="font-serif font-bold text-lg text-[#111] mb-2 cursor-pointer hover:text-gray-600 transition-colors" onclick="openProductModal(${product.id})">${product.name}</h3>
-                            <p class="text-xs text-gray-500 line-clamp-2 mb-4 font-light">${product.desc}</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-4 border-t border-[#e5e0dc]">
-                            <div>
-                                <span class="font-serif font-bold text-lg text-[#111]">${product.price.toFixed(2)} PLN</span>
-                                ${product.oldPrice ? `<span class="text-xs text-gray-400 line-through ml-2">${product.oldPrice.toFixed(2)} PLN</span>` : ''}
-                            </div>
-                            <button onclick="openProductModal(${product.id})" class="px-4 py-2.5 rounded-full bg-[#111] text-white font-medium text-xs tracking-wider uppercase hover:bg-gray-800 transition-all">
-                                Wybierz
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // --- Filter Management ---
-        function filterProducts(category) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-5 py-2.5 rounded-full bg-[#f1efed] border border-[#e5e0dc] text-gray-700 hover:text-black font-medium text-xs tracking-wider uppercase transition-all";
-            });
-            const activeBtn = document.getElementById(`filter-${category}`);
-            if (activeBtn) {
-                activeBtn.className = "filter-btn px-5 py-2.5 rounded-full bg-[#111] text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm";
-            }
-            renderProducts(category);
-        }
-
-        // --- Product Quick View Modal ---
-        let currentModalProduct = null;
-        let modalSelectedSize = null;
-
-        function openProductModal(productId) {
-            const product = products.find(p => p.id === productId);
-            currentModalProduct = product;
-            modalSelectedSize = product.sizes[0];
-
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `
-                <div class="rounded-2xl overflow-hidden bg-[#e8e2db]">
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-80 object-cover" onerror="this.src='https://placehold.co/600x700/e8e2db/111111?text=BLAZSTAR'">
-                </div>
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-500 block mb-1">Blazstar Klasyka</span>
-                        <h3 class="font-serif font-bold text-2xl text-[#111] mb-2">${product.name}</h3>
-                        <div class="font-serif font-bold text-xl text-[#111] mb-4">${product.price.toFixed(2)} PLN</div>
-                        <p class="text-xs text-gray-600 mb-6 font-light leading-relaxed">${product.desc}</p>
-                        
-                        <div class="mb-6">
-                            <span class="text-xs font-semibold text-gray-700 block mb-2">Wybierz rozmiar:</span>
-                            <div class="flex gap-2" id="modal-sizes">
-                                ${product.sizes.map((s, idx) => `<button onclick="selectModalSize('${s}')" class="modal-size-btn px-3 py-1.5 text-xs rounded-lg border font-medium ${idx === 0 ? 'bg-[#111] text-white border-[#111]' : 'bg-[#f1efed] text-gray-700 border-[#e5e0dc]'}">${s}</button>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="addModalProductToCart()" class="w-full py-3.5 rounded-full bg-[#111] text-white font-medium text-xs tracking-wider uppercase hover:bg-gray-800 transition-all shadow-md">
-                        Dodaj do koszyka
-                    </button>
-                </div>
-            `;
-
-            document.getElementById('product-modal').classList.remove('hidden');
-        }
-
-        function selectModalSize(size) {
-            modalSelectedSize = size;
-            document.querySelectorAll('.modal-size-btn').forEach(btn => {
-                if (btn.innerText === size) {
-                    btn.className = "modal-size-btn px-3 py-1.5 text-xs rounded-lg border font-medium bg-[#111] text-white border-[#111]";
-                } else {
-                    btn.className = "modal-size-btn px-3 py-1.5 text-xs rounded-lg border font-medium bg-[#f1efed] text-gray-700 border-[#e5e0dc]";
-                }
-            });
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.add('hidden');
-        }
-
-        function addModalProductToCart() {
-            if (!currentModalProduct) return;
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            let list = document.getElementById('cartItemsList');
+            let totalElem = document.getElementById('cartTotal');
             
-            const existingIndex = cart.findIndex(item => item.id === currentModalProduct.id && item.size === modalSelectedSize);
-            if (existingIndex > -1) {
-                cart[existingIndex].quantity += 1;
-            } else {
-                cart.push({
-                    id: currentModalProduct.id,
-                    name: currentModalProduct.name,
-                    price: currentModalProduct.price,
-                    image: currentModalProduct.image,
-                    size: modalSelectedSize,
-                    quantity: 1
-                });
-            }
-
-            saveCart();
-            closeProductModal();
-            showToast("Dodano do koszyka", `${currentModalProduct.name} (Rozmiar: ${modalSelectedSize})`);
-        }
-
-        // --- Cart Operations ---
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            saveCart();
-        }
-
-        function updateQuantity(index, delta) {
-            cart[index].quantity += delta;
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-            }
-            saveCart();
-        }
-
-        function renderCartItems() {
-            const container = document.getElementById('cart-items-container');
-            container.innerHTML = '';
-
             if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-gray-400">
-                        <i class="fa-solid fa-bag-shopping text-3xl mb-3 text-gray-300"></i>
-                        <p class="text-xs font-light">Twój koszyk jest obecnie pusty.</p>
-                    </div>
-                `;
-                document.getElementById('cart-total').innerText = "0,00 PLN";
+                list.innerHTML = '<p style="color: #777; text-align: center; margin-top: 20px;">Koszyk jest pusty.</p>';
+                totalElem.innerText = '0';
                 return;
             }
 
+            let html = '';
             let total = 0;
             cart.forEach((item, index) => {
-                total += item.price * item.quantity;
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-3 rounded-2xl bg-[#f1efed] border border-[#e5e0dc]";
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 rounded-xl object-cover bg-white" onerror="this.src='https://placehold.co/100x100/e8e2db/111111?text=BS'">
-                        <div>
-                            <h4 class="font-serif font-bold text-xs text-[#111]">${item.name}</h4>
-                            <p class="text-[10px] text-gray-500 mt-0.5">Rozmiar: ${item.size}</p>
-                            <span class="text-xs font-semibold text-[#111]">${item.price.toFixed(2)} PLN</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex items-center border border-[#d4c9bd] rounded-lg overflow-hidden bg-white">
-                            <button onclick="updateQuantity(${index}, -1)" class="px-2 py-1 text-xs text-gray-600 hover:text-black">-</button>
-                            <span class="px-2 text-xs font-bold text-[#111]">${item.quantity}</span>
-                            <button onclick="updateQuantity(${index}, 1)" class="px-2 py-1 text-xs text-gray-600 hover:text-black">+</button>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors">
-                            <i class="fa-solid fa-trash text-xs"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(div);
+                html += `<li><span>${item.name}</span> <span>${item.price} PLN</span></li>`;
+                total += item.price;
             });
-
-            document.getElementById('cart-total').innerText = `${total.toFixed(2)} PLN`;
+            list.innerHTML = html;
+            totalElem.innerText = total;
         }
 
         function toggleCart() {
-            const drawer = document.getElementById('cart-drawer');
-            drawer.classList.toggle('hidden');
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        function checkout() {
-            if (cart.length === 0) {
-                showToast("Koszyk pusty", "Dodaj produkty przed przejściem do kasy.");
-                return;
-            }
-            showToast("Zamówienie złożone!", "Dziękujemy za zakupy w Blazstar. Przekierowujemy do płatności...");
-            cart = [];
-            saveCart();
-            setTimeout(() => {
-                toggleCart();
-            }, 1500);
-        }
-
-        // --- Toast Notification Helper ---
-        function showToast(title, msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-msg').innerText = msg;
-            
-            toast.classList.remove('translate-y-28', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-28', 'opacity-0');
-            }, 3500);
-        }
-
-        function handleNewsletter(e) {
-            e.preventDefault();
-            const email = document.getElementById('newsletter-email').value;
-            if (email) {
-                showToast("Gratulacje!", "Odebrałeś 10% rabatu na pierwsze zakupy w Blazstar.");
-                document.getElementById('newsletter-email').value = '';
-            }
-        }
-
-        // Initialize App on Load
-        window.onload = function() {
-            renderProducts();
-            updateCartCounter();
-            renderCartItems();
+            let modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
     </script>
 </body>
