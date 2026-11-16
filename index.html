@@ -539,6 +539,16 @@
             toggleChart = false;
             document.getElementById('cartModal').style.display = 'none';
         }
+
+
+        let templateParams = {
+    user_email: email,
+    order_items: cart.itemsText,
+    shipping_method: shipping,
+    payment_method: payment,
+    total_price: cart.finalSum,
+    payment_link: "https://buy.stripe.com/test_4gM9AT11jamM3KMdiu1ck00" // <--- Tutaj musisz wkleić ten link, który przed chwilą wygenerowałeś w Stripe!
+};
     </script>
 </body>
 </html>
