@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLAZSTAR — Official Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK do wysyłania prawdziwych maili -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Wklej tutaj swój Public Key z EmailJS (darmowe konto na emailjs.com)
+            emailjs.init("kGWkXwqpntMKRRVAO");
+        })();
+    </script>
     <style>
         :root {
             --bg: #0b0b0b;
@@ -30,7 +38,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER */
         header {
             display: flex;
             justify-content: space-between;
@@ -89,7 +96,6 @@
             color: #fff;
         }
 
-        /* HERO SECTION */
         .hero {
             text-align: center;
             padding: 120px 20px;
@@ -113,7 +119,6 @@
             font-size: 16px;
         }
 
-        /* PRODUCTS */
         .container {
             max-width: 1300px;
             margin: 80px auto;
@@ -210,7 +215,6 @@
             border-color: var(--text);
         }
 
-        /* MODAL / CHECKOUT */
         .modal {
             display: none;
             position: fixed;
@@ -407,23 +411,23 @@
 
             <div id="checkoutFormSection" style="display:none;">
                 <div class="form-group">
-                    <label>Adres e-mail</label>
+                    <label>Adres e-mail klienta</label>
                     <input type="email" id="emailInput" placeholder="twoj@email.com" required>
                 </div>
 
                 <div class="form-group">
                     <label>Sposób dostawy (InPost)</label>
                     <select id="shippingSelect">
-                        <option value="paczkomat">Paczkomat InPost — 14.99 PLN</option>
-                        <option value="kurier">Kurier InPost — 18.99 PLN</option>
+                        <option value="Paczkomat InPost (14.99 PLN)">Paczkomat InPost — 14.99 PLN</option>
+                        <option value="Kurier InPost (18.99 PLN)">Kurier InPost — 18.99 PLN</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Sposób płatności</label>
                     <select id="paymentSelect">
-                        <option value="blik">BLIK (Szybka płatność)</option>
-                        <option value="p24">Przelewy24 (Banki / Karta)</option>
+                        <option value="BLIK">BLIK (Szybka płatność)</option>
+                        <option value="Przelewy24">Przelewy24 (Banki / Karta)</option>
                     </select>
                 </div>
             </div>
@@ -433,7 +437,7 @@
                 <span><span id="cartTotal">0</span> PLN</span>
             </div>
 
-            <button class="checkout-btn" id="checkoutBtn" onclick="processCheckout()" style="display:none;">Przejdź do płatności</button>
+            <button class="checkout-btn" id="checkoutBtn" onclick="processCheckout()" style="display:none;">Złóż zamówienie i opłać</button>
         </div>
     </div>
 
@@ -473,19 +477,22 @@
 
             let html = '';
             let itemsTotal = 0;
+            cart.itemsText = "";
             cart.forEach((item) => {
                 html += `<li><span>${item.name}</span> <span>${item.price} PLN</span></li>`;
                 itemsTotal += item.price;
+                cart.itemsText += `${item.name} (${item.price} PLN), `;
             });
 
-            // Dodaj koszt wysyłki
-            let shippingCost = document.getElementById('shippingSelect').value === 'kurier' ? 18.99 : 14.99;
+            let isKurier = document.getElementById('shippingSelect').value.includes('Kurier');
+            let shippingCost = isKurier ? 18.99 : 14.99;
             let finalTotal = itemsTotal + shippingCost;
 
             html += `<li style="border-top: 1px dashed var(--border); padding-top: 8px; color: var(--text-muted);"><span>Dostawa InPost</span> <span>${shippingCost.toFixed(2)} PLN</span></li>`;
             
             list.innerHTML = html;
             document.getElementById('cartTotal').innerText = finalTotal.toFixed(2);
+            cart.finalSum = finalTotal.toFixed(2);
         }
 
         document.getElementById('shippingSelect').addEventListener('change', updateCart);
@@ -501,16 +508,36 @@
             let shipping = document.getElementById('shippingSelect').value;
 
             if (!email || !email.includes('@')) {
-                alert('Podaj poprawny adres e-mail do realizacji zamówienia!');
+                alert('Podaj poprawny adres e-mail, abyśmy mogli wysłać potwierdzenie zamówienia!');
                 return;
             }
 
-            let paymentName = payment === 'blag' ? 'BLIK' : 'Przelewy24';
-            alert(`Sukces! Wygenerowano sesję płatności dla ${paymentName.toUpperCase()}.\nWysyłka wybrana: InPost (${shipping}).\nNa adres ${email} wysłano instrukcję finalizacji.`);
-            
+            // Parametry wysyłane na Twojego maila przez EmailJS
+            let templateParams = {
+                user_email: email,
+                order_items: cart.itemsText,
+                shipping_method: shipping,
+                payment_method: payment,
+                total_price: cart.finalSum
+            };
+
+            // Wywołanie wysyłki maila (Wymaga darmowego skonfigurowania szablonu na emailjs.com)
+            // emailjs.send('TWOJ_SERVICE_ID', 'TWOJ_TEMPLATE_ID', templateParams)
+            //     .then(function(response) {
+            //         console.log('SUCCESS!', response.status, response. tekst);
+            //     }, function(error) {
+            //         console.log('FAILED...', error);
+            //     });
+
+            alert(`Zamówienie zostało złożone!\n\nWybrana płatność: ${payment}\nDostawa: ${shipping}\nKwota: ${cart.finalSum} PLN\n\nSymulacja przekierowania do bramki płatności...`);
+
+            // Tutaj możesz wstawić link do swojej bramki płatności (np. Stripe Payment Link, Blik link itp.)
+            // window.location.href = "https://buy.stripe.com/twoj-link-platnosci";
+
             cart = [];
             updateCart();
-            toggleCart();
+            toggleChart = false;
+            document.getElementById('cartModal').style.display = 'none';
         }
     </script>
 </body>
