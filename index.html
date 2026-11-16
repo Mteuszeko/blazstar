@@ -9,7 +9,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Wklej tutaj swój Public Key z EmailJS (darmowe konto na emailjs.com)
             emailjs.init("kGWkXwqpntMKRRVAO");
         })();
     </script>
@@ -369,7 +368,7 @@
                 <div class="product-info">
                     <div class="product-title">Blazstar Basic Czarna</div>
                     <div class="product-price">229.00 PLN</div>
-                    <button class="add-to-cart" onclick="addToCart('Blazstar Basic Czarna', 90)">Dodaj do koszyka</button>
+                    <button class="add-to-cart" onclick="addToCart('Blazstar Basic Czarna', 229)">Dodaj do koszyka</button>
                 </div>
             </div>
 
@@ -402,8 +401,7 @@
                 <div class="form-group">
                     <label>Sposób płatności</label>
                     <select id="paymentSelect">
-                        <option value="BLIK">BLIK (Szybka płatność)</option>
-                        <option value="Przelewy24">Przelewy24 (Banki / Karta)</option>
+                        <option value="Stripe (BLIK / Karta)">Stripe (BLIK / Karta / P24)</option>
                     </select>
                 </div>
             </div>
@@ -455,20 +453,19 @@
             let itemsTotal = 0;
             cart.itemsText = "";
             cart.forEach((item) => {
-                html += `<li><span>${item.name}</span> <span>${item.price} PLN</span></li>`;
+                html += `<li><span>${item.name}</span> <span>${item.price.toFixed(2)} PLN</span></li>`;
                 itemsTotal += item.price;
-                cart.itemsText += `${item.name} (${item.price} PLN), `;
+                cart.itemsText += `${item.name} (${item.price.toFixed(2)} PLN), `;
             });
 
-            let isKurier = document.getElementById('shippingSelect').value.includes('Kurier');
-            let shippingCost = isKurier ? 18.99 : 14.99;
+            let shippingCost = 14.99;
             let finalTotal = itemsTotal + shippingCost;
 
             html += `<li style="border-top: 1px dashed var(--border); padding-top: 8px; color: var(--text-muted);"><span>Dostawa InPost</span> <span>${shippingCost.toFixed(2)} PLN</span></li>`;
             
             list.innerHTML = html;
             document.getElementById('cartTotal').innerText = finalTotal.toFixed(2);
-            cart.finalSum = finalTotal.toFixed(2);
+            cart.finalSum = finalTotal;
         }
 
         document.getElementById('shippingSelect').addEventListener('change', updateCart);
@@ -488,43 +485,49 @@
                 return;
             }
 
-            // Parametry wysyłane na Twojego maila przez EmailJS
+            let numericTotal = cart.finalSum;
+            // Kwota w zaokrągleniu do groszy/całkowitych pod Stripe quantity (np. 243.99 -> 244 zł lub mnożnik bazowy 1 PLN)
+            let stripeQuantity = Math.round(numericTotal); 
+
+            // Twój wygenerowany link ze Stripe z dopisanym parametrem dynamicznej ilości
+            let stripePaymentLink = "https://buy.stripe.com/test_4gMfZh11j0Mc812a6i1ck01?quantity=" + stripeQuantity;
+
+            // Parametry przekazywane do szablonu w EmailJS
             let templateParams = {
                 user_email: email,
+                email: email,
+                order_id: Math.floor(Math.random() * 900000) + 100000,
                 order_items: cart.itemsText,
                 shipping_method: shipping,
                 payment_method: payment,
-                total_price: cart.finalSum
+                payment_link: stripePaymentLink,
+                cost: {
+                    shipping: "14.99",
+                    tax: "0.00",
+                    total: numericTotal.toFixed(2)
+                },
+                orders: cart.map(item => ({
+                    name: item.name,
+                    units: 1,
+                    price: item.price.toFixed(2),
+                    image_url: "https://blazstar.pl/logo.png"
+                }))
             };
 
-            // Wywołanie wysyłki maila (Wymaga darmowego skonfigurowania szablonu na emailjs.com)
-            // emailjs.send('TWOJ_SERVICE_ID', 'TWOJ_TEMPLATE_ID', templateParams)
-            //     .then(function(response) {
-            //         console.log('SUCCESS!', response.status, response. tekst);
-            //     }, function(error) {
-            //         console.log('FAILED...', error);
-            //     });
+            // Wysyłka maila przez EmailJS i natychmiastowe przekierowanie do Stripe
+            emailjs.send('service_hnsfex1', 'TUTAJ_WKLEJ_SWOJ_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Przekierowanie klienta do bramki Stripe z wyliczoną kwotą koszyka
+                    window.location.href = stripePaymentLink;
 
-            alert(`Zamówienie zostało złożone!\n\nWybrana płatność: ${payment}\nDostawa: ${shipping}\nKwota: ${cart.finalSum} PLN\n\nSymulacja przekierowania do bramki płatności...`);
-
-            // Tutaj możesz wstawić link do swojej bramki płatności (np. Stripe Payment Link, Blik link itp.)
-            // window.location.href = "https://buy.stripe.com/twoj-link-platnosci";
-
-            cart = [];
-            updateCart();
-            toggleChart = false;
-            document.getElementById('cartModal').style.display = 'none';
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Wystąpił błąd przy wysyłaniu powiadomienia, ale zostaniesz przekierowany do płatności.');
+                    window.location.href = stripePaymentLink;
+                });
         }
-
-
-        let templateParams = {
-    user_email: email,
-    order_items: cart.itemsText,
-    shipping_method: shipping,
-    payment_method: payment,
-    total_price: cart.finalSum,
-    payment_link: "https://buy.stripe.com/test_4gMfZh11j0Mc812a6i1ck01" // <--- Tutaj musisz wkleić ten link, który przed chwilą wygenerowałeś w Stripe!
-};
     </script>
 </body>
 </html>
