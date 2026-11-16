@@ -3,221 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLAZSTAR — Sklep Odzieżowy</title>
+    <title>BLAZSTAR — Official Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0b0b0b;
+            --surface: #141414;
+            --surface-light: #1f1f1f;
+            --accent: #ff3366;
+            --text: #f5f5f7;
+            --text-muted: #888888;
+            --border: #2a2a2a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
+
         body {
-            background-color: #fcfbfa;
-            color: #1a1a1a;
-            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
         }
+
+        /* HEADER */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background: #ffffff;
-            border-bottom: 1px solid #eaeaea;
+            padding: 24px 5%;
+            background: rgba(11, 11, 11, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
         }
+
         .logo {
+            font-family: 'Syne', sans-serif;
             font-size: 24px;
             font-weight: 800;
-            letter-spacing: 2px;
-        }
-        nav a {
-            margin: 0 15px;
+            letter-spacing: 3px;
+            color: var(--text);
             text-decoration: none;
-            color: #333;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: var(--text-muted);
             font-size: 14px;
             font-weight: 500;
             transition: color 0.2s;
         }
+
         nav a:hover {
-            color: #000;
+            color: var(--text);
         }
+
         .cart-btn {
-            background: #1a1a1a;
-            color: #fff;
+            background: var(--text);
+            color: var(--bg);
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 10px 22px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.2s, background 0.2s;
         }
+
         .cart-btn:hover {
-            background: #333;
+            transform: scale(1.05);
+            background: var(--accent);
+            color: #fff;
         }
+
+        /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 100px 20px;
-            background: #f4f2ee;
+            padding: 120px 20px;
+            background: radial-gradient(circle at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid var(--border);
         }
+
         .hero h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-            font-weight: 400;
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 800;
+            margin-bottom: 20px;
             letter-spacing: -1px;
+            text-transform: uppercase;
         }
+
         .hero p {
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
+            color: var(--text-muted);
+            max-width: 550px;
+            margin: 0 auto 35px auto;
             font-size: 16px;
         }
+
+        /* PRODUCTS */
         .container {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 0 20px;
+            max-width: 1300px;
+            margin: 80px auto;
+            padding: 0 30px;
         }
+
         .section-title {
-            text-align: center;
-            font-size: 28px;
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
             margin-bottom: 40px;
-            font-weight: 600;
+            letter-spacing: -0.5px;
         }
+
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
+
         .product-card {
-            background: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s;
+            transition: transform 0.3s, border-color 0.3s;
         }
+
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            border-color: #444;
         }
+
         .product-img {
-            height: 320px;
-            background: #e5e5e5;
+            height: 380px;
+            background: var(--surface-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #888;
-            font-weight: 500;
-        }
-        .product-info {
-            padding: 20px;
-            text-align: center;
-        }
-        .product-title {
-            font-size: 16px;
+            color: var(--text-muted);
             font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 8px;
         }
+
         .product-price {
-            color: #444;
-            font-size: 15px;
-            margin-bottom: 15px;
-            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
+
         .add-to-cart {
-            background: #1a1a1a;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
+            background: var(--surface-light);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px;
             width: 100%;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.2s;
+            font-size: 14px;
+            transition: background 0.2s, border-color 0.2s;
         }
+
         .add-to-cart:hover {
-            background: #333;
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
         }
-        /* Modal koszyka */
+
+        /* MODAL / CHECKOUT */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
+
         .modal-content {
-            background: #fff;
-            padding: 30px;
-            width: 400px;
-            border-radius: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 16px;
             position: relative;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .cart-items {
-            list-style: none;
-            margin: 20px 0;
-            max-height: 200px;
+            max-height: 90vh;
             overflow-y: auto;
         }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 25px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .close-modal:hover {
+            color: var(--text);
+        }
+
+        .modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .cart-items {
+            list-style: none;
+            margin-bottom: 25px;
+            max-height: 180px;
+            overflow-y: auto;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
         .cart-items li {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+            margin-bottom: 12px;
             font-size: 14px;
         }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 12px 15px;
+            color: var(--text);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            font-family: 'Syne', sans-serif;
+        }
+
         .checkout-btn {
-            background: #27ae60;
+            background: var(--accent);
             color: #fff;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: 600;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+
+        .checkout-btn:hover {
+            opacity: 0.9;
+        }
+
         footer {
             text-align: center;
-            padding: 40px;
-            background: #1a1a1a;
-            color: #fff;
-            margin-top: 80px;
-            font-size: 14px;
+            padding: 60px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 100px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">BLAZSTAR</div>
+        <a href="#" class="logo">BLAZ<span>STAR</span></a>
         <nav>
-            <a href="#">Strona Główna</a>
-            <a href="#produkty">Kolekcja</a>
-            <a href="#">O Marki</a>
+            <a href="#">Kolekcja</a>
+            <a href="#">O nas</a>
             <a href="#">Kontakt</a>
         </nav>
         <button class="cart-btn" onclick="toggleCart()">Koszyk (<span id="cart-count">0</span>)</button>
     </header>
 
     <section class="hero">
-        <h1>Nowoczesny Styl i Miejski Klimat</h1>
-        <p>Odkryj najnowszą kolekcję odzieży BLAZSTAR – zaprojektowaną z myślą o wygodzie, unikalnym designie i najwyższej jakości wykonania.</p>
+        <h1>Future Streetwear</h1>
+        <p>Limitowane kolekcje odzieży zaprojektowane bezkompromisowo. Najwyższa gramatura, unikalny krój.</p>
     </section>
 
-    <div class="container" id="produkty">
-        <h2 class="section-title">Wyróżnione Produkty</h2>
+    <div class="container">
+        <h2 class="section-title">Drop 01 / Dostępne produkty</h2>
         <div class="products-grid">
             
             <div class="product-card">
-                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-img">
+                    <span class="product-tag">Bestseller</span>
+                    ZDJĘCIE PRODUKTU
+                </div>
                 <div class="product-info">
                     <div class="product-title">Oversize Hoodie BLAZSTAR</div>
                     <div class="product-price">229.00 PLN</div>
@@ -226,7 +370,10 @@
             </div>
 
             <div class="product-card">
-                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-img">
+                    <span class="product-tag">Nowość</span>
+                    ZDJĘCIE PRODUKTU
+                </div>
                 <div class="product-info">
                     <div class="product-title">Heavyweight T-Shirt Black</div>
                     <div class="product-price">119.00 PLN</div>
@@ -235,7 +382,9 @@
             </div>
 
             <div class="product-card">
-                <div class="product-img">ZDJĘCIE ODZIEŻY</div>
+                <div class="product-img">
+                    ZDJĘCIE PRODUKTU
+                </div>
                 <div class="product-info">
                     <div class="product-title">Cargo Pants Techwear</div>
                     <div class="product-price">279.00 PLN</div>
@@ -246,16 +395,45 @@
         </div>
     </div>
 
-    <!-- Modal Koszyka -->
+    <!-- MODAL ZAMÓWIENIA -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <span class="close-modal" onclick="toggleCart()">&times;</span>
-            <h2>Twój Koszyk</h2>
+            <div class="modal-title">Twój Koszyk i Zamówienie</div>
+            
             <ul class="cart-items" id="cartItemsList">
-                <p style="color: #777; text-align: center; margin-top: 20px;">Koszyk jest pusty.</p>
+                <p style="color: var(--text-muted); text-align: center; padding: 20px 0;">Koszyk jest pusty.</p>
             </ul>
-            <div style="font-weight: 600; margin-bottom: 20px; text-align: right;">Suma: <span id="cartTotal">0</span> PLN</div>
-            <button class="checkout-btn" onclick="alert('Dziękujemy za zamówienie w BLAZSTAR! (Wersja demonstracyjna)')">Przejdź do kasy</button>
+
+            <div id="checkoutFormSection" style="display:none;">
+                <div class="form-group">
+                    <label>Adres e-mail</label>
+                    <input type="email" id="emailInput" placeholder="twoj@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Sposób dostawy (InPost)</label>
+                    <select id="shippingSelect">
+                        <option value="paczkomat">Paczkomat InPost — 14.99 PLN</option>
+                        <option value="kurier">Kurier InPost — 18.99 PLN</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Sposób płatności</label>
+                    <select id="paymentSelect">
+                        <option value="blik">BLIK (Szybka płatność)</option>
+                        <option value="p24">Przelewy24 (Banki / Karta)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="total-row" id="totalRowContainer" style="display:none;">
+                <span>Do zapłaty:</span>
+                <span><span id="cartTotal">0</span> PLN</span>
+            </div>
+
+            <button class="checkout-btn" id="checkoutBtn" onclick="processCheckout()" style="display:none;">Przejdź do płatności</button>
         </div>
     </div>
 
@@ -269,33 +447,70 @@
         function addToCart(name, price) {
             cart.push({ name, price });
             updateCart();
-            alert(`Dodano do koszyka: ${name}`);
+            toggleCart();
         }
 
         function updateCart() {
-            document.getElementById('cart-count').innerText = cart.length;
+            let countEl = document.getElementById('cart-count');
             let list = document.getElementById('cartItemsList');
-            let totalElem = document.getElementById('cartTotal');
+            let formSec = document.getElementById('checkoutFormSection');
+            let totalRow = document.getElementById('totalRowContainer');
+            let btn = document.getElementById('checkoutBtn');
+            
+            countEl.innerText = cart.length;
             
             if (cart.length === 0) {
-                list.innerHTML = '<p style="color: #777; text-align: center; margin-top: 20px;">Koszyk jest pusty.</p>';
-                totalElem.innerText = '0';
+                list.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px 0;">Koszyk jest pusty.</p>';
+                formSec.style.display = 'none';
+                totalRow.style.display = 'none';
+                btn.style.display = 'none';
                 return;
             }
 
+            formSec.style.display = 'block';
+            totalRow.style.display = 'flex';
+            btn.style.display = 'block';
+
             let html = '';
-            let total = 0;
-            cart.forEach((item, index) => {
+            let itemsTotal = 0;
+            cart.forEach((item) => {
                 html += `<li><span>${item.name}</span> <span>${item.price} PLN</span></li>`;
-                total += item.price;
+                itemsTotal += item.price;
             });
+
+            // Dodaj koszt wysyłki
+            let shippingCost = document.getElementById('shippingSelect').value === 'kurier' ? 18.99 : 14.99;
+            let finalTotal = itemsTotal + shippingCost;
+
+            html += `<li style="border-top: 1px dashed var(--border); padding-top: 8px; color: var(--text-muted);"><span>Dostawa InPost</span> <span>${shippingCost.toFixed(2)} PLN</span></li>`;
+            
             list.innerHTML = html;
-            totalElem.innerText = total;
+            document.getElementById('cartTotal').innerText = finalTotal.toFixed(2);
         }
+
+        document.getElementById('shippingSelect').addEventListener('change', updateCart);
 
         function toggleCart() {
             let modal = document.getElementById('cartModal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function processCheckout() {
+            let email = document.getElementById('emailInput').value;
+            let payment = document.getElementById('paymentSelect').value;
+            let shipping = document.getElementById('shippingSelect').value;
+
+            if (!email || !email.includes('@')) {
+                alert('Podaj poprawny adres e-mail do realizacji zamówienia!');
+                return;
+            }
+
+            let paymentName = payment === 'blag' ? 'BLIK' : 'Przelewy24';
+            alert(`Sukces! Wygenerowano sesję płatności dla ${paymentName.toUpperCase()}.\nWysyłka wybrana: InPost (${shipping}).\nNa adres ${email} wysłano instrukcję finalizacji.`);
+            
+            cart = [];
+            updateCart();
+            toggleCart();
         }
     </script>
 </body>
