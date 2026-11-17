@@ -487,11 +487,11 @@
 
             let numericTotal = cart.finalSum;
             
-            // Ponieważ produkt w Stripe kosztuje 2 zł (minimalna kwota), dzielimy sumę przez 2, aby uzyskać właściwą ilość (quantity)
-            let stripeQuantity = Math.max(1, Math.round(numericTotal / 2)); 
+            // Przeliczamy sumę na grosze dla Stripe (np. 243.99 zł -> 24399 groszy) przy cenie niestandardowej
+            let amountInCents = Math.round(numericTotal * 100);
 
-            // Twój wygenerowany link ze Stripe z dopisanym parametrem dynamicznej ilości
-            let stripePaymentLink = "https://buy.stripe.com/test_4gMfZh11j0Mc812a6i1ck01?quantity=" + stripeQuantity;
+            // Link Stripe z predefiniowaną kwotą w groszach dla produktu "Customer chooses price"
+            let stripePaymentLink = "https://buy.stripe.com/test_00w3cv9xP8eEa9a7Ya1ck02?prefilled_price=" + amountInCents;
 
             // Parametry przekazywane do szablonu w EmailJS
             let templateParams = {
