@@ -487,11 +487,11 @@
 
             let numericTotal = cart.finalSum;
             
-            // Przeliczamy sumę na grosze dla Stripe (np. 243.99 zł -> 24399 groszy) przy cenie niestandardowej
+            // Przeliczamy sumę na grosze dla Stripe (np. 243.99 zł -> 24399 groszy)
             let amountInCents = Math.round(numericTotal * 100);
 
-            // Link Stripe z predefiniowaną kwotą w groszach dla produktu "Customer chooses price"
-            let stripePaymentLink = "https://buy.stripe.com/test_aFa14nfWdgLa8121zM1ck03?prefilled_amount=" + amountInCents;
+            // Twój nowy link ze Stripe z predefiniowaną kwotą
+          let stripePaymentLink = "https://buy.stripe.com/test_fZudR9e9D2ftu1zM1ck04?quantity=" + stripeQuantity;
 
             // Parametry przekazywane do szablonu w EmailJS
             let templateParams = {
