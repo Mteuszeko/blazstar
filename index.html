@@ -487,11 +487,12 @@
 
             let numericTotal = cart.finalSum;
             
-            // Przeliczamy sumę na grosze dla Stripe (np. 243.99 zł -> 24399 groszy)
-            let amountInCents = Math.round(numericTotal * 100);
+            // Poprawnie wyliczamy ilość sztuk dla Stripe dzieląc przez cenę produktu (2 zł)
+            let roundedTotal = Math.round(numericTotal);
+            let stripeQuantity = Math.max(1, Math.round(roundedTotal / 2)); 
 
-            // Twój nowy link ze Stripe z predefiniowaną kwotą
-          let stripePaymentLink = "https://buy.stripe.com/test_fZudR9e9D2ftu1zM1ck04?quantity=" + stripeQuantity;
+            // Twój link ze Stripe z poprawnym parametrem quantity
+            let stripePaymentLink = "https://buy.stripe.com/test_fZudR9e9D2ftu1zM1ck04?quantity=" + stripeQuantity;
 
             // Parametry przekazywane do szablonu w EmailJS
             let templateParams = {
@@ -519,10 +520,7 @@
             emailjs.send('service_hnsfex1', 'template_jpjpepf', templateParams)
                 .then(function(response) {
                     console.log('SUCCESS!', response.status, response.text);
-                    
-                    // Przekierowanie klienta do bramki Stripe z wyliczoną kwotą koszyka
                     window.location.href = stripePaymentLink;
-
                 }, function(error) {
                     console.log('FAILED...', error);
                     alert('Wystąpił błąd przy wysyłaniu powiadomienia, ale zostaniesz przekierowany do płatności.');
